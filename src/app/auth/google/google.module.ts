@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { GoogleService } from './google.service';
-import { GoogleController } from './google.controller';
+import { GoogleStrategy } from './strategy/google.strategy';
+import { UserModule } from 'src/app/user/user.module';
 
 @Module({
-  controllers: [GoogleController],
-  providers: [GoogleService],
+  imports: [UserModule],
+  providers: [GoogleService, GoogleStrategy],
+  exports: [GoogleService],
 })
 export class GoogleModule {}

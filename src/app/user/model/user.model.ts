@@ -14,6 +14,9 @@ export class User {
   })
   email: string;
 
+  @Column()
+  avatar: string;
+
   @Column({
     type: 'enum',
     default: ERole.USER,
@@ -27,9 +30,13 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
-  @Column()
+  @Column({
+    default: new Date(),
+  })
   createdAt: Date;
 
-  @Column()
+  @Column({
+    default: new Date(),
+  })
   updatedAt: Date;
 }
