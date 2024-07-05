@@ -9,6 +9,8 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ExceptionFilter } from './filter/exception.filter';
 import { ResponseInterceptor } from './interceptor/response.interceptor';
 import { MessageModule } from './app/message/message.module';
+import { StoreModule } from './app/store/store.module';
+import { MotorcycleModule } from './app/motorcycle/motorcycle.module';
 import { AuthModule } from './app/auth/auth.module';
 
 @Module({
@@ -33,6 +35,8 @@ import { AuthModule } from './app/auth/auth.module';
     }),
     UserModule,
     MessageModule,
+    StoreModule,
+    MotorcycleModule,
     AuthModule,
   ],
   controllers: [AppController],
