@@ -1,43 +1,99 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './model/user.model';
 import { Repository } from 'typeorm';
 import { IGooglePayload } from 'src/types/interface/IGoolePayload.interface';
-import { ERole } from 'src/types/enum/ERole.enum';
+import { Profile } from 'passport-google-oauth20';
+import { TokenManagerService } from '../auth/token-manager.service';
+import { ILoginResponse } from '../auth/interface/IAuthResponse.interface';
+import { IJwtPayload } from 'src/types/interface/IJwtPayload.interface';
+import { MessageService } from '../message/message.service';
+import LoginDto from '../auth/dto/login.dto';
+import { PasswordConfService } from './password-conf.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+
+    @Inject(forwardRef(() => TokenManagerService))
+    private tokenManagerService: TokenManagerService,
+
+    private passwordConfService: PasswordConfService,
+    private messageService: MessageService,
   ) {}
 
-  async getOrCreateUser({
-    email,
-    name,
-    avatar,
-  }: IGooglePayload): Promise<User> {
-    const user: User = await this.userRepository.findOne({
+  public async getOrCreateUserByGoogleProfile(
+    profile: Profile,
+  ): Promise<ILoginResponse> {
+    const payload: IGooglePayload = {
+      name: profile.displayName,
+      email: profile.emails[0].value,
+      avatar: profile.photos[0].value,
+    };
+
+    let user: User;
+
+    user = await this.userRepository.findOne({
       where: {
-        name,
-        email,
-        avatar,
+        email: payload.email,
       },
     });
 
     if (!user) {
-      const newUser: User = await this.userRepository.save({
-        name,
-        email,
-        avatar,
-        role: ERole.USER,
+      user = await this.userRepository.save({
+        ...payload,
       });
 
-      if (!newUser) throw new BadRequestException('User not created');
-
-      return newUser;
+      if (!user) throw new BadRequestException('User not created');
     }
 
-    return user;
+    const jwtPayload: IJwtPayload = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    };
+
+    this.messageService.setMessage('User created successfully');
+
+    return {
+      accessToken:
+        await this.tokenManagerService.generateAccessToken(jwtPayload),
+      refreshToken:
+        await this.tokenManagerService.generateRefreshToken(jwtPayload),
+    };
+  }
+
+  public async verifyCredentials({
+    email,
+    password,
+  }: LoginDto): Promise<IJwtPayload> {
+    const user: User = await this.userRepository.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) throw new BadRequestException('Email or password incorrect');
+
+    if (!user.password)
+      throw new NotFoundException('You has registered with Google');
+
+    await this.passwordConfService.comparePassword(password, user.password);
+
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    };
   }
 }
