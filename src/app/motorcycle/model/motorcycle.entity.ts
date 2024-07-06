@@ -3,7 +3,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
   name: 'mst_motorcycle',
-  orderBy: { createdAt: 'ASC' },
+  orderBy: { createdAt: 'DESC' },
 })
 export class Motorcycle {
   @PrimaryGeneratedColumn('uuid')
@@ -26,8 +26,14 @@ export class Motorcycle {
   stock: number;
 
   @Column({
+    type: 'int',
+  })
+  year: number;
+
+  @Column({
     name: 'is_deleted',
     type: 'boolean',
+    default: false,
   })
   isDeleted: boolean;
 

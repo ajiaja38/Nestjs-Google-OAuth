@@ -21,6 +21,8 @@ export class StoreService {
 
   public async finDetailStore(id: string): Promise<Store> {
     const store: Store = await this.storeRepository.findOne({ where: { id } });
+
+    this.messageService.setMessage('Get store successfully');
     return store;
   }
 

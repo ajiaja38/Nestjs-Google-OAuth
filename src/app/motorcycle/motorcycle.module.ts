@@ -3,9 +3,10 @@ import { MotorcycleService } from './motorcycle.service';
 import { MotorcycleController } from './motorcycle.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Motorcycle } from './model/motorcycle.entity';
+import { MessageModule } from '../message/message.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Motorcycle])],
+  imports: [TypeOrmModule.forFeature([Motorcycle]), MessageModule],
   controllers: [MotorcycleController],
   providers: [MotorcycleService],
 })
