@@ -12,6 +12,8 @@ import { MessageModule } from './app/message/message.module';
 import { StoreModule } from './app/store/store.module';
 import { MotorcycleModule } from './app/motorcycle/motorcycle.module';
 import { AuthModule } from './app/auth/auth.module';
+import { TrxPurchaseModule } from './app/trx-purchase/trx-purchase.module';
+import { TrxDetailPurchaseModule } from './app/trx-detail-purchase/trx-detail-purchase.module';
 
 @Module({
   imports: [
@@ -38,6 +40,8 @@ import { AuthModule } from './app/auth/auth.module';
     StoreModule,
     MotorcycleModule,
     AuthModule,
+    TrxPurchaseModule,
+    TrxDetailPurchaseModule,
   ],
   controllers: [AppController],
   providers: [

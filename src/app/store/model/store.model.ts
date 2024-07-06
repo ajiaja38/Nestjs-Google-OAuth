@@ -14,11 +14,15 @@ export class Store {
   name: string;
 
   @Column({
+    name: 'created_at',
+    type: 'timestamp',
     default: new Date(),
   })
   createdAt: Date;
 
   @Column({
+    name: 'updated_at',
+    type: 'timestamp',
     default: new Date(),
   })
   updatedAt: Date;

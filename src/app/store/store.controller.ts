@@ -27,7 +27,7 @@ export class StoreController {
   }
 
   @Get(':id')
-  @Roles(ERole.ADMIN)
+  @Roles(ERole.ADMIN, ERole.USER)
   protected async finDetailStore(@Param('id') id: string): Promise<Store> {
     return await this.storeService.finDetailStore(id);
   }
