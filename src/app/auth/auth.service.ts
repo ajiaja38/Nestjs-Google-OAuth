@@ -21,6 +21,7 @@ export class AuthService {
     const jwtPayload: IJwtPayload =
       await this.userService.verifyCredentials(loginDto);
 
+    this.messageService.setMessage('Login Successfully');
     return {
       accessToken:
         await this.tokenManagerService.generateAccessToken(jwtPayload),

@@ -16,6 +16,8 @@ import { IJwtPayload } from 'src/types/interface/IJwtPayload.interface';
 import { MessageService } from '../message/message.service';
 import LoginDto from '../auth/dto/login.dto';
 import { PasswordConfService } from './password-conf.service';
+import { RegisterUserDto } from './dto/registerUser.dto';
+import { ERole } from 'src/types/enum/ERole.enum';
 
 @Injectable()
 export class UserService {
@@ -70,6 +72,23 @@ export class UserService {
       refreshToken:
         await this.tokenManagerService.generateRefreshToken(jwtPayload),
     };
+  }
+
+  public async registerNativeUser(
+    { name, email, password }: RegisterUserDto,
+    role: ERole,
+  ): Promise<User> {
+    const user: User = await this.userRepository.save({
+      name,
+      email,
+      password: await this.passwordConfService.hashPassword(password),
+      role,
+    });
+
+    if (!user) throw new BadRequestException('User not created');
+
+    this.messageService.setMessage('User created successfully');
+    return user;
   }
 
   public async verifyCredentials({
