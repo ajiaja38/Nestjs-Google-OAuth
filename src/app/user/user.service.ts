@@ -134,4 +134,14 @@ export class UserService {
       ],
     });
   }
+
+  public async findUserById(id: string): Promise<User> {
+    const user: User = await this.userRepository.findOneBy({ id });
+
+    if (!user) throw new NotFoundException('User not found');
+
+    this.messageService.setMessage('Get user successfully');
+
+    return user;
+  }
 }

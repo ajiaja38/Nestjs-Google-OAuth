@@ -9,5 +9,6 @@ import { MessageModule } from '../message/message.module';
   imports: [TypeOrmModule.forFeature([Motorcycle]), MessageModule],
   controllers: [MotorcycleController],
   providers: [MotorcycleService],
+  exports: [MotorcycleService],
 })
 export class MotorcycleModule {}

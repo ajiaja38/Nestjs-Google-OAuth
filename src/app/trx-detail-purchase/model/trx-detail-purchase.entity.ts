@@ -10,33 +10,22 @@ import {
 
 @Entity({
   name: 'trx_detail_purchase',
-  orderBy: {
-    createdAt: 'ASC',
-  },
 })
 export class TrxDetailPurchase {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({
+    name: 'total_price',
+    type: 'int',
+  })
+  totalPrice: number;
+
+  @Column({
     name: 'quantity',
     type: 'int',
   })
   quantity: number;
-
-  @Column({
-    name: 'created_at',
-    type: 'timestamp',
-    default: new Date(),
-  })
-  createdAt: Date;
-
-  @Column({
-    name: 'updated_at',
-    type: 'timestamp',
-    default: new Date(),
-  })
-  updatedAt: Date;
 
   @ManyToOne(() => TrxPurchase, (trxPurchase) => trxPurchase.transactionDetails)
   @JoinColumn({ name: 'trx_purchase_id', referencedColumnName: 'id' })

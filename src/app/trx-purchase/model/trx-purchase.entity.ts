@@ -30,7 +30,7 @@ export class TrxPurchase {
     name: 'total_price',
     type: 'numeric',
   })
-  totalPrice: number;
+  totalTransactionPrice: number;
 
   @ManyToOne(() => User, (user) => user.transactions)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
