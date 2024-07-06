@@ -14,6 +14,8 @@ import { MotorcycleModule } from './app/motorcycle/motorcycle.module';
 import { AuthModule } from './app/auth/auth.module';
 import { TrxPurchaseModule } from './app/trx-purchase/trx-purchase.module';
 import { TrxDetailPurchaseModule } from './app/trx-detail-purchase/trx-detail-purchase.module';
+import { addTransactionalDataSource } from 'typeorm-transactional';
+import { DataSource } from 'typeorm';
 
 @Module({
   imports: [
@@ -24,16 +26,27 @@ import { TrxDetailPurchaseModule } from './app/trx-detail-purchase/trx-detail-pu
     CacheModule.register({
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.POSTGRES_HOST,
-      port: parseInt(process.env.POSTGRES_PORT),
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
-      autoLoadEntities: true,
+    TypeOrmModule.forRootAsync({
+      useFactory() {
+        return {
+          type: 'postgres',
+          host: process.env.POSTGRES_HOST,
+          port: parseInt(process.env.POSTGRES_PORT),
+          username: process.env.POSTGRES_USER,
+          password: process.env.POSTGRES_PASSWORD,
+          database: process.env.POSTGRES_DB,
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          synchronize: true,
+          autoLoadEntities: true,
+        };
+      },
+      async dataSourceFactory(options) {
+        if (!options) {
+          throw new Error('Invalid options passed');
+        }
+
+        return addTransactionalDataSource(new DataSource(options));
+      },
     }),
     UserModule,
     MessageModule,
