@@ -115,4 +115,23 @@ export class UserService {
       role: user.role,
     };
   }
+
+  public async findAllUsers(): Promise<User[]> {
+    this.messageService.setMessage('Get all users successfully');
+    return await this.userRepository.find({
+      where: {
+        role: ERole.USER,
+      },
+      select: [
+        'id',
+        'name',
+        'email',
+        'role',
+        'avatar',
+        'isActive',
+        'createdAt',
+        'updatedAt',
+      ],
+    });
+  }
 }

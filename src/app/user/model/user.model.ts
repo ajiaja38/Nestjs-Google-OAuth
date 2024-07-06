@@ -1,7 +1,10 @@
 import { ERole } from 'src/types/enum/ERole.enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({ name: 'mst_user' })
+@Entity({
+  name: 'mst_user',
+  orderBy: { createdAt: 'ASC' },
+})
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
