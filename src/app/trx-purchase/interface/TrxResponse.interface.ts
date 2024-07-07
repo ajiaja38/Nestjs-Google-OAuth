@@ -1,4 +1,4 @@
-export interface ICreateTrxResponse {
+export interface ITrxDetailResponse {
   id: string;
   createdAt: Date;
   totalTransactionPrice: number;

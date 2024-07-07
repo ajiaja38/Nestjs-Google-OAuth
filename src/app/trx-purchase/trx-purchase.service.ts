@@ -12,8 +12,8 @@ import { Motorcycle } from '../motorcycle/model/motorcycle.entity';
 import { User } from '../user/model/user.model';
 import { TrxDetailPurchase } from '../trx-detail-purchase/model/trx-detail-purchase.entity';
 import { MessageService } from '../message/message.service';
-import { ICreateTrxResponse } from './interface/CreateTrxResponse.interface';
 import { Transactional } from 'typeorm-transactional';
+import { ITrxDetailResponse } from './interface/TrxResponse.interface';
 
 @Injectable()
 export class TrxPurchaseService {
@@ -35,7 +35,7 @@ export class TrxPurchaseService {
   async createTransaction(
     userId: string,
     createTransactionDto: CreateTransactionDto,
-  ): Promise<ICreateTrxResponse> {
+  ): Promise<ITrxDetailResponse> {
     const user: User = await this.userService.findUserById(userId);
     const userBalance: number = createTransactionDto.userBalance;
 
@@ -76,7 +76,14 @@ export class TrxPurchaseService {
     if (userBalance < trxPurchase.totalTransactionPrice)
       throw new BadRequestException('Balance not enough');
 
-    const transformData: ICreateTrxResponse = {
+    this.messageService.setMessage('Create transaction successfully');
+    return this.transformDetailTransactionPurchase(trxPurchase);
+  }
+
+  private transformDetailTransactionPurchase(
+    trxPurchase: TrxPurchase,
+  ): ITrxDetailResponse {
+    return {
       id: trxPurchase.id,
       totalTransactionPrice: trxPurchase.totalTransactionPrice,
       user: {
@@ -99,8 +106,5 @@ export class TrxPurchaseService {
       ),
       createdAt: trxPurchase.createdAt,
     };
-
-    this.messageService.setMessage('Create transaction successfully');
-    return transformData;
   }
 }
