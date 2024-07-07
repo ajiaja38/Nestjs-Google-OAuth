@@ -12,7 +12,7 @@ import {
 @Entity({
   name: 'trx_purchase',
   orderBy: {
-    createdAt: 'ASC',
+    createdAt: 'DESC',
   },
 })
 export class TrxPurchase {
