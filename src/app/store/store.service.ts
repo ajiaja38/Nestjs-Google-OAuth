@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Store } from './model/store.model';
 import { MessageService } from '../message/message.service';
-import { StoreRepository } from './repository/user.repository';
 import { StoreDto } from './dto/Store.dto';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class StoreService {
   constructor(
     @InjectRepository(Store)
-    private storeRepository: StoreRepository,
+    private storeRepository: Repository<Store>,
     private messageService: MessageService,
   ) {}
 

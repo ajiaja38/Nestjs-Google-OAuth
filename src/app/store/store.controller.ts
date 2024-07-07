@@ -10,10 +10,10 @@ import {
 import { StoreService } from './store.service';
 import { Store } from './model/store.model';
 import { StoreDto } from './dto/Store.dto';
-import { JwtAuthGuard } from 'src/guard/jwt.auth.guard';
-import { RoleGuard } from 'src/guard/role.guard';
-import { Roles } from 'src/decorator/Roles.decorator';
-import { ERole } from 'src/types/enum/ERole.enum';
+import { JwtAuthGuard } from '../../guard/jwt.auth.guard';
+import { RoleGuard } from '../../guard/role.guard';
+import { Roles } from '../../decorator/Roles.decorator';
+import { ERole } from '../../types/enum/ERole.enum';
 
 @Controller('store')
 @UseGuards(JwtAuthGuard, RoleGuard)
