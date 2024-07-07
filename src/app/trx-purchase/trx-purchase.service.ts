@@ -32,7 +32,7 @@ export class TrxPurchaseService {
   ) {}
 
   @Transactional()
-  async createTransaction(
+  public async createTransaction(
     userId: string,
     createTransactionDto: CreateTransactionDto,
   ): Promise<ITrxDetailResponse> {
