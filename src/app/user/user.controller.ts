@@ -2,10 +2,10 @@ import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './model/user.model';
 import { RegisterUserDto } from './dto/registerUser.dto';
-import { ERole } from 'src/types/enum/ERole.enum';
-import { JwtAuthGuard } from 'src/guard/jwt.auth.guard';
-import { Roles } from 'src/decorator/Roles.decorator';
-import { RoleGuard } from 'src/guard/role.guard';
+import { ERole } from '../../types/enum/ERole.enum';
+import { JwtAuthGuard } from '../../guard/jwt.auth.guard';
+import { Roles } from '../../decorator/Roles.decorator';
+import { RoleGuard } from '../../guard/role.guard';
 
 @Controller('user')
 export class UserController {

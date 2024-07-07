@@ -1,5 +1,5 @@
-import { TrxPurchase } from 'src/app/trx-purchase/model/trx-purchase.entity';
-import { ERole } from 'src/types/enum/ERole.enum';
+import { TrxPurchase } from '../../trx-purchase/model/trx-purchase.entity';
+import { ERole } from '../../../types/enum/ERole.enum';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
