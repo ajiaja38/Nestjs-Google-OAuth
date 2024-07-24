@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { GoogleAuthGuard } from 'src/guard/Google.auth.guard';
@@ -18,6 +19,7 @@ import {
 } from './interface/IAuthResponse.interface';
 import { RefreshTokenDto } from './dto/refreshtoken.dto';
 import LoginDto from './dto/login.dto';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -32,8 +34,22 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   protected async redirectWithGoogleHandler(
     @Req() req: any,
-  ): Promise<ILoginResponse> {
-    return await this.userService.getOrCreateUserByGoogleProfile(req.user);
+    @Res() res: Response,
+  ): Promise<void> {
+    const loginResponse: ILoginResponse =
+      await this.userService.getOrCreateUserByGoogleProfile(req.user);
+
+    res.cookie('accessToken', loginResponse.accessToken, {
+      httpOnly: true,
+      maxAge: 3600000,
+    });
+
+    res.cookie('refreshToken', loginResponse.refreshToken, {
+      httpOnly: true,
+      maxAge: 604800000,
+    });
+
+    res.redirect('http://localhost:3000/api/v1');
   }
 
   @Post('login')
